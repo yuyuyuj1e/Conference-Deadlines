@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ddl.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icommon/style.css') }}">
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.3.min.js') }}"></script>
+    <title>ccf-deadlines</title>
+</head>
+<body>
+    <div class="container" style="max-width: 980px">
+        <div class="page-header">
+            <div class="col-12 col-sm-12">
+                <h1 style="font-size: 30px; line-height: 35px; font-weight: 500">Cyber Security Conference Deadlines</h1>
+            </div>
+            <div class="meta col-12">
+                <span>Cyber Security Countdowns to CCF conference deadlines.To add/edit a conference,send to WeChat official account </span>
+                <a target="_blank" href="" style="text-decoration: none; color: inherit; border-bottom: 1px solid #ccc">
+                    <span>安全张之家</span>
+                </a>
+                <span>.</span>
+            </div>
+            <br>
+            <div class="row">
+                <form class="container">
+                    <div class="row justify-content-center">
+                        <div class="row align-items-md-center col-12 col-10-md">
+                            <div class="col-12 col-md-4 filter-label">
+                                <span style="font-size: 16px; font-weight: 600">CCF Filter:</span>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic checkbox toggle button group">
+                                    <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off"
+                                           {% if flags[0] %}checked{% endif %}>
+                                    <label class="btn btn-outline-primary" for="btncheck1">CCF A</label>
+
+                                    <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off"
+                                           {% if flags[1] %}checked{% endif %}>
+                                    <label class="btn btn-outline-primary" for="btncheck2">CCF B</label>
+
+                                    <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off"
+                                           {% if flags[2] %}checked{% endif %}>
+                                    <label class="btn btn-outline-primary" for="btncheck3">CCF C</label>
+
+                                    <input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off"
+                                           {% if flags[3] %}checked{% endif %}>
+                                    <label class="btn btn-outline-primary" for="btncheck4">Non CCF</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+            <div class="row">
+                <div class="meta row align-items-md-center col-12 col-10-md">
+                    <div class="col-12 col-md-6">
+                        <label class="">Deadlines are shown in Asia/Shanghai time.</label>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <form class="d-flex" role="search" id="search-form" method="post">
+                            <span class="input-group-text">
+                                <i class="icon-search" style="margin-right: 3px"></i>
+                                <input class="form-control me-1" name="search" type="search" id="search"
+                                       placeholder="Search Conference" aria-label="Search"
+                                       value="{% if content != None %}{{ content }}{% endif %}">
+                                <button class="btn btn-outline-primary btn-sm" type="submit">Search</button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="conferences">
+            <div class="conference-container">
+                {% for conference in conferences_pagination.items %}
+                <div class="conference-item">
+                    <div class="row item-row">
+                        <div class="col-12 col-sm-6">
+                            <span class="item-title" style="border-bottom: 1px solid #ccc;">
+                                <a class="link" title="Conference Website" href="{{ conference.website }}"
+                                   target="_blank">
+                                    {{ conference.sname }} {{ conference.year }}
+                                </a>
+                            </span>
+                            <span class="item-title-icon">
+                               <a class="link" title="dblp Website" href="{{ conference.dblp }}" target="_blank" >
+                                   <i class="icon-earth"></i>
+                               </a>
+                            </span>
+                            <span class="item-title-icon">
+                               <a class="link" title="Conference Location" href="https://www.google.com/maps?q={{ conference.location }}" target="_blank" >
+                                   <i class="icon-location"></i>
+                               </a>
+                            </span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <span class="timer" id="{{ conference.id }}">
+                                00 days 00 h 00 m 00 s
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row item-row">
+                        <div class="col-12 col-sm-6 meta">
+                            <span class="conference-date">{{ conference.date }}.</span>
+                            <span class="conference-location">
+                                <a class="link" href="https://www.google.com/maps?q={{ conference.location }}"
+                                    style="border-bottom: 1px solid #ccc;" target="_blank">
+                                    {{ conference.location }}
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-12 col-sm-6 meta deadline">
+                            Deadline:
+                            <span>{{ conference.deadline_cst }}</span>
+                            CST
+                        </div>
+                    </div>
+                    <div class="row item-row">
+                        <div class="col-12 col-sm-6 meta">{{ conference.name }}</div>
+                        <div class="col-12 col-sm-6 meta">
+                            <span class="conference-website">
+                                Website:
+                                <a class="link" href="{{ conference.website }}"
+                                   style="border-bottom: 1px solid #ccc;" target="_blank">
+                                    {{ conference.website }}
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row item-row">
+                        <div class="col-12 col-sm-6">
+                            <span class="meta" style="font-weight: 600">label:</span>
+                            <span class="conference-label">
+                                {% if conference.CCF == "A" or conference.CCF == "B" or conference.CCF == "C" %}
+                                    CCF {{ conference.CCF }}
+                                {% else %}
+                                    Non-CCF
+                                {% endif %}
+                            </span>
+                            <span class="conference-label"> {{ conference.publisher }}</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <span class="conference-note"><b>NOTE: </b>{{ conference.NOTE }}</span>
+                        </div>
+                    </div>
+                    <hr style="border-top: 1px solid rgba(0, 0, 0, .1)">
+                </div>
+            {% endfor %}
+            </div>
+{#            <nav aria-label="Page navigation" style="float: right">#}
+{#                <ul class="pagination">#}
+{#                   <li class="page-item disabled">#}
+{#                       <a class="page-link" href="#" aria-label="Previous">#}
+{#                           <span aria-hidden="true">&laquo;</span>#}
+{#                       </a>#}
+{#                   </li>#}
+{#                    {% for page_num in range(1, conferences_pagination.pages + 1) %}#}
+{#                       <li {% if conferences_pagination.page == page_num %} class="active" {% endif %} class="page-item">#}
+{#                           <a class="page-link" href="#"><span>{{ page_num }}</span></a>#}
+{#                       </li>#}
+{#                    {% endfor %}#}
+{#                    <li class="page-item">#}
+{#                       <a class="page-link" href="#" aria-label="Next">#}
+{#                           <span aria-hidden="true">&raquo;</span>#}
+{#                       </a>#}
+{#                   </li>#}
+{#                </ul>#}
+{#            </nav>#}
+        </div>
+    </div>
+<script src="{{ url_for('static', filename='js/function.js') }}"></script>
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+</body>
+</html>
