@@ -1,3 +1,12 @@
+'''
+author: yuyuyuj1e 807152541@qq.com
+github: https://github.com/yuyuyuj1e
+csdn: https://blog.csdn.net/yuyuyuj1e
+date: 2023-02-07 16:21:12
+last_edit_time: 2023-02-08 21:55:04
+file_path: /Conference-Deadlines/config.py
+description: 头部注释配置模板
+'''
 # -*- coding: utf-8 -*-
 # @Author     : yuyuyuj1e
 # @GitHub     : https://github.com/yuyuyuj1e
@@ -16,3 +25,7 @@ DATABASE = "ddl"  # 连接的数据库
 
 SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}" \
                                         f"?charset=utf8mb4"
+
+# 分页配置
+per_page = 5  # 每页显示数据数
+max_pages = 5  # 分页最多显示页数

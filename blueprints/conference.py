@@ -11,6 +11,7 @@ from flask import Blueprint, request
 from flask import render_template
 from models import ConferenceModel
 from sqlalchemy import or_, text
+from config import per_page, max_pages
 
 bp = Blueprint("conference", __name__, url_prefix="/")
 
@@ -31,7 +32,7 @@ def get_conference(content, flags, page):
                 ConferenceModel.sname.like("%" + content + "%") if content is not None else text('')
             ) \
             .order_by(ConferenceModel.year.desc()) \
-            .paginate(page=page, per_page=5)
+            .paginate(page=page, per_page=per_page)
 
     # conferences_pagination = ConferenceModel.query.paginate(page=1, per_page=5)
     # print(conferences_pagination.items)
@@ -54,19 +55,19 @@ def index():
         page = int(request.args.get("page", 1))
         content = request.args.get('search', '')
         conferences_pagination = get_conference(content, flags, page)
-        if conferences_pagination.pages - page <= 5:
+        if conferences_pagination.pages - page <= max_pages:
             page_end = conferences_pagination.pages
-        elif conferences_pagination.pages <= 5:
+        elif conferences_pagination.pages <= max_pages:
             page_end = conferences_pagination.pages
         else:
-            page_end = page + 5
+            page_end = page + max_pages
 
-        if conferences_pagination.pages - page > 5:
+        if conferences_pagination.pages - page > max_pages:
             page_begin = page
-        elif conferences_pagination.pages <= 5:
+        elif conferences_pagination.pages <= max_pages:
             page_begin = 1
         else:
-            page_begin = conferences_pagination.pages - 5
+            page_begin = conferences_pagination.pages - max_pages
 
         print(f"pages: {conferences_pagination.pages}, page_begin:{page_begin}, page_end:{page_end}")
         print(request.form, request.args)
@@ -75,10 +76,10 @@ def index():
     elif request.method == 'POST':
         content = request.form.get('search', '')
         conferences_pagination = get_conference(content, flags, 1)
-        if conferences_pagination.pages <= 5:
+        if conferences_pagination.pages <= max_pages:
             page_end = conferences_pagination.pages
         else:
-            page_end = 5
+            page_end = max_pages
 
         print(f"pages: {conferences_pagination.pages}, page_begin:1, page_end:{page_end}")
         print(request.form, request.args)
