@@ -32,7 +32,7 @@ def get_conference(content, flags, page):
             ) \
             .order_by(ConferenceModel.year.desc()) \
             .paginate(page=page, per_page=5)
-    print(page)
+
     # conferences_pagination = ConferenceModel.query.paginate(page=1, per_page=5)
     # print(conferences_pagination.items)
     # print(conferences_pagination.page, conferences_pagination.pages)
@@ -49,17 +49,38 @@ def index():
         True if request.args.get('check3', 'true') == 'true' or request.args.get('check3', 'true') == 'True' else False,
         True if request.args.get('check4', 'true') == 'true' or request.args.get('check4', 'true') == 'True' else False
     ]
-    page = int(request.args.get("page", 1))
 
     if request.method == 'GET':
+        page = int(request.args.get("page", 1))
         content = request.args.get('search', '')
         conferences_pagination = get_conference(content, flags, page)
+        if conferences_pagination.pages - page <= 5:
+            page_end = conferences_pagination.pages
+        elif conferences_pagination.pages <= 5:
+            page_end = conferences_pagination.pages
+        else:
+            page_end = page + 5
+
+        if conferences_pagination.pages - page > 5:
+            page_begin = page
+        elif conferences_pagination.pages <= 5:
+            page_begin = 1
+        else:
+            page_begin = conferences_pagination.pages - 5
+
+        print(f"pages: {conferences_pagination.pages}, page_begin:{page_begin}, page_end:{page_end}")
         print(request.form, request.args)
-        print(1, content, flags)
-        return render_template('home.html', conferences_pagination=conferences_pagination, flags=flags, content=content)
+        print("GET", content, flags)
+        return render_template('home.html', conferences_pagination=conferences_pagination, flags=flags, content=content, page_begin=page_begin, page_end=page_end)
     elif request.method == 'POST':
         content = request.form.get('search', '')
         conferences_pagination = get_conference(content, flags, 1)
+        if conferences_pagination.pages <= 5:
+            page_end = conferences_pagination.pages
+        else:
+            page_end = 5
+
+        print(f"pages: {conferences_pagination.pages}, page_begin:1, page_end:{page_end}")
         print(request.form, request.args)
-        print(2, content, flags)
-        return render_template('home.html', conferences_pagination=conferences_pagination, flags=flags, content=content)
+        print("POST", content, flags)
+        return render_template('home.html', conferences_pagination=conferences_pagination, flags=flags, content=content, page_begin=1, page_end=page_end)

@@ -58,3 +58,7 @@
 .timeout {
     opacity: .6;
 }
+
+.footer-content {
+    margin-bottom: 16px;
+}
