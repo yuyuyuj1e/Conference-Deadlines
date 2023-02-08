@@ -15,7 +15,7 @@ from sqlalchemy import or_, text
 bp = Blueprint("conference", __name__, url_prefix="/")
 
 
-def get_conference(content, flags):
+def get_conference(content, flags, page):
     conferences_pagination = []
     if flags[0] or flags[1] or flags[2] or flags[3]:
         conferences_pagination = ConferenceModel.query \
@@ -31,8 +31,8 @@ def get_conference(content, flags):
                 ConferenceModel.sname.like("%" + content + "%") if content is not None else text('')
             ) \
             .order_by(ConferenceModel.year.desc()) \
-            .paginate(page=1)
-
+            .paginate(page=page, per_page=5)
+    print(page)
     # conferences_pagination = ConferenceModel.query.paginate(page=1, per_page=5)
     # print(conferences_pagination.items)
     # print(conferences_pagination.page, conferences_pagination.pages)
@@ -44,21 +44,22 @@ def get_conference(content, flags):
 @bp.route("/", methods=['GET', 'POST'])
 def index():
     flags = [
-        True if request.args.get('check1', 'true') == 'true' else False,
-        True if request.args.get('check2', 'true') == 'true' else False,
-        True if request.args.get('check3', 'true') == 'true' else False,
-        True if request.args.get('check4', 'true') == 'true' else False
+        True if request.args.get('check1', 'true') == 'true' or request.args.get('check1', 'true') == 'True' else False,
+        True if request.args.get('check2', 'true') == 'true' or request.args.get('check2', 'true') == 'True' else False,
+        True if request.args.get('check3', 'true') == 'true' or request.args.get('check3', 'true') == 'True' else False,
+        True if request.args.get('check4', 'true') == 'true' or request.args.get('check4', 'true') == 'True' else False
     ]
+    page = int(request.args.get("page", 1))
 
     if request.method == 'GET':
-        content = request.args.get('search', None)
-        conferences_pagination = get_conference(content, flags)
+        content = request.args.get('search', '')
+        conferences_pagination = get_conference(content, flags, page)
         print(request.form, request.args)
         print(1, content, flags)
         return render_template('home.html', conferences_pagination=conferences_pagination, flags=flags, content=content)
     elif request.method == 'POST':
-        content = request.form.get('search', None)
-        conferences_pagination = get_conference(content, flags)
+        content = request.form.get('search', '')
+        conferences_pagination = get_conference(content, flags, 1)
         print(request.form, request.args)
         print(2, content, flags)
         return render_template('home.html', conferences_pagination=conferences_pagination, flags=flags, content=content)

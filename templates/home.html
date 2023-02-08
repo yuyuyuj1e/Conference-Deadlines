@@ -152,25 +152,32 @@
                 </div>
             {% endfor %}
             </div>
-{#            <nav aria-label="Page navigation" style="float: right">#}
-{#                <ul class="pagination">#}
-{#                   <li class="page-item disabled">#}
-{#                       <a class="page-link" href="#" aria-label="Previous">#}
-{#                           <span aria-hidden="true">&laquo;</span>#}
-{#                       </a>#}
-{#                   </li>#}
-{#                    {% for page_num in range(1, conferences_pagination.pages + 1) %}#}
-{#                       <li {% if conferences_pagination.page == page_num %} class="active" {% endif %} class="page-item">#}
-{#                           <a class="page-link" href="#"><span>{{ page_num }}</span></a>#}
-{#                       </li>#}
-{#                    {% endfor %}#}
-{#                    <li class="page-item">#}
-{#                       <a class="page-link" href="#" aria-label="Next">#}
-{#                           <span aria-hidden="true">&raquo;</span>#}
-{#                       </a>#}
-{#                   </li>#}
-{#                </ul>#}
-{#            </nav>#}
+            <nav aria-label="Page navigation" style="float: right">
+                <ul class="pagination">
+                   <li class="page-item {% if conferences_pagination.has_prev == False %}disabled{% endif %}">
+                       <a class="page-link" aria-label="Previous"
+                          href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page={{ conferences_pagination.prev_num }}">
+                           &laquo;
+                       </a>
+                   </li>
+                    {% if flags[0] or flags[1] or flags[2] or flags[3] %}
+                        {% for page_num in range(1, conferences_pagination.pages + 1) %}
+                           <li {% if conferences_pagination.page == page_num %} class="active" {% endif %} class="page-item">
+                               <a class="page-link"
+                                  href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page={{ page_num }}">
+                                   {{ page_num }}
+                               </a>
+                           </li>
+                        {% endfor %}
+                    {% endif %}
+                    <li class="page-item {% if conferences_pagination.has_next == False %}disabled{% endif %}">
+                       <a class="page-link" aria-label="Next"
+                          href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page={{ conferences_pagination.next_num }}">
+                           &raquo;
+                       </a>
+                   </li>
+                </ul>
+            </nav>
         </div>
     </div>
 <script src="{{ url_for('static', filename='js/function.js') }}"></script>
