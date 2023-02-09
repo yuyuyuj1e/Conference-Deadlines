@@ -56,19 +56,19 @@ def index():
         conferences_pagination = get_conference(content, flags, page)
         page_begin = page_end = 0
         if flags[0] or flags[1] or flags[2] or flags[3]:
-            if conferences_pagination.pages - page <= max_pages:
+            if conferences_pagination.pages - page < max_pages:
                 page_end = conferences_pagination.pages
-            elif conferences_pagination.pages <= max_pages:
+            elif conferences_pagination.pages < max_pages:
                 page_end = conferences_pagination.pages
             else:
-                page_end = page + max_pages
+                page_end = page + max_pages - 1
 
-            if conferences_pagination.pages - page > max_pages:
+            if conferences_pagination.pages - page >= max_pages:
                 page_begin = page
-            elif conferences_pagination.pages <= max_pages:
+            elif conferences_pagination.pages < max_pages:
                 page_begin = 1
             else:
-                page_begin = conferences_pagination.pages - max_pages
+                page_begin = conferences_pagination.pages - max_pages + 1
 
         print(f"page_begin:{page_begin}, page_end:{page_end}")
         print(request.form, request.args)
@@ -79,7 +79,7 @@ def index():
         conferences_pagination = get_conference(content, flags, 1)
         page_end = 0
         if flags[0] or flags[1] or flags[2] or flags[3]:
-            if conferences_pagination.pages <= max_pages:
+            if conferences_pagination.pages < max_pages:
                 page_end = conferences_pagination.pages
             else:
                 page_end = max_pages

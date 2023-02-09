@@ -19,4 +19,4 @@ SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PO
 
 # 分页配置
 per_page = 5  # 每页显示数据数
-max_pages = 5  # 分页最多显示页数
+max_pages = 6  # 分页最多显示页数
