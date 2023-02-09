@@ -161,13 +161,19 @@
                     <a class="link" href="https://github.com/yuyuyuj1e" target="_blank">@yuyuyuj1e</a>.
                     If you find it useful, star this project, thanks~
                 </div>
-                <div class="col-12 offset-3 col-sm-4 offset-sm-2">
+                <div class="col-12 col-sm-6">
                     <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                           <li class="page-item {% if conferences_pagination.has_prev == False %}disabled{% endif %}">
+                        <ul class="pagination pagination-sm">
+                           <li class="page-item {% if conferences_pagination.has_prev == False or page_begin >= page_end  %}disabled{% endif %}">
+                               <a class="page-link" aria-label="Previous"
+                                  href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page=1">
+                                   &laquo;
+                               </a>
+                           </li>
+                            <li class="page-item {% if conferences_pagination.has_prev == False or page_begin >= page_end %}disabled{% endif %}">
                                <a class="page-link" aria-label="Previous"
                                   href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page={{ conferences_pagination.prev_num }}">
-                                   &laquo;
+                                   prev
                                </a>
                            </li>
                             {% if flags[0] or flags[1] or flags[2] or flags[3] %}
@@ -180,9 +186,15 @@
                                    </li>
                                 {% endfor %}
                             {% endif %}
-                            <li class="page-item {% if conferences_pagination.has_next == False %}disabled{% endif %}">
+                            <li class="page-item {% if conferences_pagination.has_next == False or page_begin >= page_end  %}disabled{% endif %}">
                                <a class="page-link" aria-label="Next"
                                   href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page={{ conferences_pagination.next_num }}">
+                                   next
+                               </a>
+                           </li>
+                            <li class="page-item {% if conferences_pagination.has_next == False or page_begin >= page_end  %}disabled{% endif %}">
+                               <a class="page-link" aria-label="Next"
+                                  href="{{ url_for('conference.index') }}?check1={{ flags[0] }}&check2={{ flags[1] }}&check3={{ flags[2] }}&check4={{ flags[3] }}&search={{ content }}&page={{ conferences_pagination.pages }}">
                                    &raquo;
                                </a>
                            </li>
