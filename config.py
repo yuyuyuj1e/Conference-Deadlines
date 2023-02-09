@@ -1,12 +1,3 @@
-'''
-author: yuyuyuj1e 807152541@qq.com
-github: https://github.com/yuyuyuj1e
-csdn: https://blog.csdn.net/yuyuyuj1e
-date: 2023-02-07 16:21:12
-last_edit_time: 2023-02-08 21:55:04
-file_path: /Conference-Deadlines/config.py
-description: 头部注释配置模板
-'''
 # -*- coding: utf-8 -*-
 # @Author     : yuyuyuj1e
 # @GitHub     : https://github.com/yuyuyuj1e
